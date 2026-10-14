@@ -18,3 +18,7 @@ The codes come from the German Wikipedia article [Liste der Kfz-Kennzeichen in D
 ```sh
 npm run plates
 ```
+
+## License
+
+The code is [MIT](LICENSE) licensed. The plate data in `src/data/plates.json` is derived from Wikipedia and stays under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
