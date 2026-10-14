@@ -1,11 +1,11 @@
 ---
-
+import { base } from "@/consts";
 ---
 
-<script is:inline>
+<script is:inline define:vars={{ base }}>
 	window.addEventListener("load", () => {
 		if ("serviceWorker" in navigator) {
-			navigator.serviceWorker.register("/sw.js");
+			navigator.serviceWorker.register(`${base}sw.js`);
 		}
 	});
 </script>

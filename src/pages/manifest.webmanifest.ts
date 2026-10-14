@@ -1,14 +1,14 @@
 import type { APIRoute } from "astro";
-import { siteTitle, siteDescription, themeColor } from "@/consts";
+import { siteTitle, siteDescription, themeColor, base } from "@/consts";
 
 const webmanifest = {
-	id: "/",
+	id: base,
 	name: siteTitle,
 	short_name: "Woher",
 	description: siteDescription,
 	lang: "en",
-	start_url: "/",
-	scope: "/",
+	start_url: base,
+	scope: base,
 	display: "standalone",
 	orientation: "any",
 	theme_color: themeColor,
@@ -16,19 +16,19 @@ const webmanifest = {
 	categories: ["travel", "utilities"],
 	icons: [
 		{
-			src: "/icon.svg",
+			src: `${base}icon.svg`,
 			type: "image/svg+xml",
 			sizes: "any",
 			purpose: "any maskable",
 		},
 		{
-			src: "/icon-mono.svg",
+			src: `${base}icon-mono.svg`,
 			type: "image/svg+xml",
 			sizes: "any",
 			purpose: "monochrome",
 		},
 		{
-			src: "/apple-touch-icon.png",
+			src: `${base}apple-touch-icon.png`,
 			type: "image/png",
 			sizes: "180x180",
 		},

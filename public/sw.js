@@ -1,5 +1,6 @@
 const CACHE_NAME = "woher";
-const APP_URL = "/";
+// The worker sits next to the page, so this follows whatever base path the site is served from
+const APP_URL = new URL("./", self.location.href).href;
 
 /**
  * Collects the same origin files a page links to, so the app works offline after the first visit.
@@ -25,7 +26,7 @@ async function refreshCache(response) {
 	await cache.addAll(assets);
 	await cache.put(APP_URL, response);
 
-	const keep = new Set([APP_URL, ...assets].map((url) => new URL(url, self.location.origin).href));
+	const keep = new Set([APP_URL, ...assets.map((url) => new URL(url, self.location.origin).href)]);
 	const stale = (await cache.keys()).filter((request) => !keep.has(request.url));
 	await Promise.all(stale.map((request) => cache.delete(request)));
 }

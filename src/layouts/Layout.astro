@@ -1,7 +1,7 @@
 ---
 import "@/assets/main.css";
 import ServiceWorker from "@/components/ServiceWorker.astro";
-import { siteTitle, themeColor, isProd } from "@/consts";
+import { siteTitle, themeColor, isProd, base } from "@/consts";
 
 interface Props {
 	title: string;
@@ -24,9 +24,9 @@ const { title, description } = Astro.props;
 		<meta property="og:description" content={description} />
 		<meta name="apple-mobile-web-app-title" content={siteTitle} />
 		<meta name="mobile-web-app-capable" content="yes" />
-		<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-		<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-		<link rel="manifest" href="/manifest.webmanifest" />
+		<link rel="icon" href={`${base}favicon.svg`} type="image/svg+xml" />
+		<link rel="apple-touch-icon" href={`${base}apple-touch-icon.png`} />
+		<link rel="manifest" href={`${base}manifest.webmanifest`} />
 		{isProd && <ServiceWorker />}
 	</head>
 	<body>
