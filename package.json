@@ -1,0 +1,23 @@
+{
+	"name": "woher",
+	"type": "module",
+	"version": "0.0.1",
+	"engines": {
+		"node": ">=22.12.0"
+	},
+	"scripts": {
+		"start": "npm run dev",
+		"dev": "astro dev",
+		"build": "astro build",
+		"preview": "astro preview",
+		"astro": "astro",
+		"plates": "node scripts/fetch-plates.mjs"
+	},
+	"dependencies": {
+		"@fylgja/base": "^2.1.6",
+		"@fylgja/card": "^2.0.2",
+		"@fylgja/tokens": "^2.2.1",
+		"@fylgja/utilities": "^2.1.4",
+		"astro": "^7.3.8"
+	}
+}

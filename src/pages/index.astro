@@ -1,0 +1,213 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Plate from "@/components/Plate.astro";
+import { siteDescription as description } from "@/consts";
+import {
+	plates,
+	letters,
+	normalize,
+	searchText,
+	stripTags,
+	wikiUrl,
+	mapUrl,
+	searchUrl,
+} from "@/plates";
+
+const title = "Woher? German licence plate lookup";
+---
+
+<Layout title={title} description={description}>
+	<header class="flow">
+		<h1>Woher<span class="text-brand">?</span></h1>
+		<p>
+			Spotted a German plate? Type the letters before the seals and find out where it is from.
+		</p>
+	</header>
+
+	<search class="finder flow">
+		<form action="" method="get">
+			<Plate tag="label" class="plate-search">
+				<input
+					type="search"
+					name="q"
+					id="q"
+					placeholder="EL"
+					aria-label="Plate code or place name"
+					aria-describedby="status"
+					autocomplete="off"
+					autocapitalize="characters"
+					spellcheck="false"
+					enterkeyhint="search"
+					maxlength="40"
+					autofocus
+				/>
+			</Plate>
+		</form>
+		<p id="status" class="text-muted" aria-live="polite">{plates.length} codes</p>
+		<nav aria-label="Browse by letter">
+			<ul role="list" class="letters flex-wrap gap-sm">
+				{
+					letters.map((letter) => (
+						<li>
+							<a class="btn" href={`?q=${letter}`} data-letter={letter}>
+								{letter}
+							</a>
+						</li>
+					))
+				}
+			</ul>
+		</nav>
+	</search>
+
+	<ol role="list" id="results" class="results auto-grid gap">
+		{
+			plates.map((plate) => (
+				<li
+					class="card flex-col gap-sm"
+					id={plate.code}
+					data-code={normalize(plate.code)}
+					data-search={searchText(plate)}
+				>
+					<h2>
+						<Plate code={plate.code} />
+					</h2>
+					<p class="origin" title={`${plate.code} comes from ${stripTags(plate.origin)}`}>
+						<Fragment set:html={plate.origin} />
+					</p>
+					<ul role="list" class="districts">
+						{plate.districts.map((district) => (
+							<li>
+								<a href={searchUrl(district, plate.state)}>{district.name}</a>
+							</li>
+						))}
+					</ul>
+					<p class="text-muted">{plate.state}</p>
+					<p class="more flex-wrap gap-sm" style="--my: auto 0">
+						{wikiUrl(plate.districts[0]) && <a href={wikiUrl(plate.districts[0])}>Wikipedia</a>}
+						<a href={mapUrl(plate.districts[0], plate.state)}>Google Maps</a>
+					</p>
+				</li>
+			))
+		}
+	</ol>
+	<p id="empty" class="empty" hidden>
+		No current German code matches that. It could be an old code that is no longer issued, or a plate
+		from another country.
+	</p>
+	<a
+		href="#q"
+		id="back-to-top"
+		class="back-to-top btn --primary fixed round"
+		style="--inset-b: var(--size-6); --inset-e: var(--size-6); --z: 10"
+		aria-label="Back to search"
+	>
+		<svg
+			aria-hidden="true"
+			width="24"
+			height="24"
+			viewBox="0 0 24 24"
+			fill="none"
+			stroke="currentColor"
+			stroke-width="2.5"
+			stroke-linecap="round"
+			stroke-linejoin="round"
+		>
+			<path d="m5 12 7-7 7 7M12 19V5"></path>
+		</svg>
+	</a>
+</Layout>
+
+<script>
+	import { normalize } from "@/normalize";
+
+	const input = document.querySelector<HTMLInputElement>("#q")!;
+	const list = document.querySelector<HTMLOListElement>("#results")!;
+	const status = document.querySelector<HTMLParagraphElement>("#status")!;
+	const empty = document.querySelector<HTMLParagraphElement>("#empty")!;
+	const items = [...list.querySelectorAll<HTMLLIElement>(":scope > li")];
+	const letterLinks = [...document.querySelectorAll<HTMLAnchorElement>("[data-letter]")];
+	const total = items.length;
+
+	const escape = (value: string) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+	/** Lower is better, `undefined` means no match. */
+	function rank(item: HTMLLIElement, code: string, words?: RegExp): number | undefined {
+		const itemCode = item.dataset.code ?? "";
+		if (itemCode === code) return 0;
+		if (itemCode.startsWith(code)) return 1;
+		if (words?.test(item.dataset.search ?? "")) return 2;
+	}
+
+	function update(value: string) {
+		const query = normalize(value);
+		const letter = value.trim().toLocaleUpperCase("de");
+		letterLinks.forEach((link) => {
+			if (link.dataset.letter === letter) link.setAttribute("aria-current", "true");
+			else link.removeAttribute("aria-current");
+		});
+		// A full plate like "EL-AB 123" only needs the part before the first separator.
+		const code = query.split(/[\s\-:0-9]/)[0];
+		const isPlate = code !== query;
+		const words =
+			query.length > 2 && !isPlate ? new RegExp(`(^|[^A-Z])${escape(query)}`) : undefined;
+
+		if (!query) {
+			list.replaceChildren(...items);
+			items.forEach((item) => item.classList.remove("is-match"));
+			status.textContent = `${total} codes`;
+			empty.hidden = true;
+			return;
+		}
+
+		const matches = items
+			.map((item, index) => ({ item, index, rank: code ? rank(item, code, words) : undefined }))
+			.filter((match) => match.rank !== undefined)
+			.sort((a, b) => a.rank! - b.rank! || a.index - b.index);
+
+		items.forEach((item) => item.classList.remove("is-match"));
+		matches.forEach((match) => match.item.classList.toggle("is-match", match.rank === 0));
+		list.replaceChildren(...matches.map((match) => match.item));
+
+		const exact = matches.filter((match) => match.rank === 0).length;
+		status.textContent = exact
+			? `${code} found${matches.length > exact ? `, plus ${matches.length - exact} more` : ""}`
+			: `${matches.length} ${matches.length === 1 ? "match" : "matches"}`;
+		empty.hidden = matches.length > 0;
+	}
+
+	function sync() {
+		const url = new URL(location.href);
+		url.hash = "";
+		const value = input.value.trim();
+		if (value) url.searchParams.set("q", value);
+		else url.searchParams.delete("q");
+		history.replaceState(null, "", url);
+	}
+
+	input.addEventListener("input", () => {
+		update(input.value);
+		sync();
+	});
+
+	// The link scrolls by itself, this only readies the search so typing starts the next lookup
+	input.form?.addEventListener("submit", (event) => {
+		event.preventDefault();
+		input.blur();
+	});
+
+	letterLinks.forEach((link) => {
+		link.addEventListener("click", (event) => {
+			event.preventDefault();
+			input.value = link.dataset.letter ?? "";
+			update(input.value);
+			sync();
+			input.focus();
+		});
+	});
+
+	const initial = new URLSearchParams(location.search).get("q");
+	if (initial) {
+		input.value = initial;
+		update(initial);
+	}
+</script>

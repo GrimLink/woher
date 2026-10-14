@@ -1,0 +1,18 @@
+---
+interface Props {
+	code?: string;
+	tag?: "span" | "label";
+	class?: string;
+}
+
+const { code, tag: Tag = "span", class: className } = Astro.props;
+---
+
+<Tag class:list={["plate", className]}>
+	<span class="plate-eu" aria-hidden="true">D</span>
+	<span class="plate-text">
+		{code}
+		<slot />
+		{code && <span class="plate-seals" aria-hidden="true"></span>}
+	</span>
+</Tag>

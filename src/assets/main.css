@@ -1,0 +1,249 @@
+@layer theme, base, components, utilities;
+
+@import "@fylgja/base" layer(base);
+@import "@fylgja/base/theme.css" layer(base);
+
+@import "@fylgja/tokens/css/sizes.css" layer(theme);
+@import "@fylgja/tokens/css/fonts.css" layer(theme);
+@import "@fylgja/tokens/css/shadows.css" layer(theme);
+
+@import "@fylgja/card/index.css" layer(components);
+
+@import "@fylgja/utilities" layer(utilities);
+
+/* DIN Condensed puts its cap height at the ascent line, which pushes the letters to the top of the plate */
+@font-face {
+	font-family: "Plate DIN";
+	src: local("DIN Condensed Bold"), local("DINCondensed-Bold");
+	font-weight: 700;
+	ascent-override: 86%;
+	descent-override: 14%;
+	line-gap-override: 0%;
+}
+
+@layer theme {
+	:root {
+		--eu-blue: #039;
+		--eu-stars: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-10 -10 20 20' fill='%23fc0'><circle cx='0.0' cy='-8.0' r='1.4'/><circle cx='4.0' cy='-6.9' r='1.4'/><circle cx='6.9' cy='-4.0' r='1.4'/><circle cx='8.0' cy='-0.0' r='1.4'/><circle cx='6.9' cy='4.0' r='1.4'/><circle cx='4.0' cy='6.9' r='1.4'/><circle cx='0.0' cy='8.0' r='1.4'/><circle cx='-4.0' cy='6.9' r='1.4'/><circle cx='-6.9' cy='4.0' r='1.4'/><circle cx='-8.0' cy='0.0' r='1.4'/><circle cx='-6.9' cy='-4.0' r='1.4'/><circle cx='-4.0' cy='-6.9' r='1.4'/></svg>");
+		--plate-bg: #fff;
+		--plate-fg: #111;
+		--plate-font: "Plate DIN", "Arial Narrow", sans-serif;
+		--color-muted: color-mix(in oklab, var(--root-fg) 70%, var(--root-bg));
+		--container-size: 72rem;
+	}
+}
+
+@layer base {
+	:root {
+		--brand: var(--eu-blue);
+	}
+
+	html {
+		container-type: scroll-state;
+	}
+
+	@media (prefers-color-scheme: dark) {
+		:root {
+			--brand: oklch(0.75 0.12 262);
+			--on-brand: #111;
+		}
+	}
+
+	body {
+		display: flex;
+		flex-direction: column;
+		min-block-size: 100dvh;
+	}
+
+	main {
+		flex-grow: 1;
+		padding-block: var(--size-12) var(--size-16);
+	}
+
+	footer {
+		padding-block: var(--size-6);
+		font-size: var(--font-size-1);
+	}
+
+	h1 {
+		font-size: clamp(var(--font-size-8), 12vw, 6rem);
+		line-height: 1;
+		letter-spacing: -0.02em;
+	}
+
+	h1 + p {
+		font-size: var(--font-size-4);
+	}
+}
+
+@layer components {
+	.plate {
+		color-scheme: light;
+		display: inline-flex;
+		align-items: stretch;
+		min-block-size: 1.35em;
+		background: var(--plate-bg);
+		color: var(--plate-fg);
+		border: 0.06em solid var(--plate-fg);
+		border-radius: 0.14em;
+		box-shadow:
+			0 0 0 0.05em var(--plate-bg),
+			var(--shadow-1);
+		font-family: var(--plate-font);
+		font-weight: 700;
+		overflow: clip;
+		vertical-align: middle;
+	}
+
+	.plate-eu {
+		display: grid;
+		place-items: center;
+		align-content: space-evenly;
+		padding-inline: 0.12em;
+		background: var(--eu-blue);
+		color: #fff;
+		font-size: 0.32em;
+
+		&::before {
+			content: "";
+			inline-size: 1.4em;
+			aspect-ratio: 1;
+			background: var(--eu-stars) center / contain no-repeat;
+		}
+	}
+
+	.plate-text {
+		display: flex;
+		flex-grow: 1;
+		align-items: center;
+		gap: 0.2em;
+		padding-inline: 0.25em 0.3em;
+		letter-spacing: 0.04em;
+	}
+
+	/* Registration seal on top, inspection sticker below */
+	.plate-seals {
+		display: grid;
+		gap: 0.05em;
+
+		&::before,
+		&::after {
+			content: "";
+			inline-size: 0.28em;
+			aspect-ratio: 1;
+			border-radius: 50%;
+		}
+
+		&::before {
+			background: conic-gradient(#e67e22 0 25%, #f39cb6 0 50%, #e67e22 0 75%, #f39cb6 0);
+		}
+
+		&::after {
+			background: radial-gradient(circle, #c8102e 30%, #ddd 0);
+		}
+	}
+
+	.plate-search {
+		display: flex;
+		inline-size: min(100%, 34rem);
+		font-size: clamp(3rem, 14vw, 5.5rem);
+		cursor: text;
+
+		&:focus-within {
+			outline: 3px solid var(--brand);
+			outline-offset: 0.12em;
+		}
+
+		& input {
+			--form-bg: transparent;
+			--form-color: currentcolor;
+			--form-border-width: 0;
+			--form-px: 0;
+			--form-py: 0;
+			--outline-size: 0;
+			text-transform: uppercase;
+
+			&::placeholder {
+				color: color-mix(in oklab, var(--plate-fg) 25%, var(--plate-bg));
+			}
+		}
+	}
+
+	.finder {
+		margin-block-start: var(--size-8);
+	}
+
+	.letters {
+		--btn-font-weight: 700;
+		font-family: var(--plate-font);
+	}
+
+	.results {
+		--max-col-size: 18rem;
+		margin-block: var(--size-8) 0;
+
+		& h2 {
+			font-size: var(--font-size-8);
+		}
+
+		& .card {
+			--text-flow: 0;
+			scroll-margin-block-start: var(--size-4);
+		}
+
+		& .is-match {
+			--card-stroke: var(--brand);
+			border-width: 2px;
+
+			& h2 {
+				font-size: var(--font-size-9);
+			}
+		}
+	}
+
+	.origin {
+		font-size: var(--font-size-4);
+
+		& b {
+			color: var(--brand);
+		}
+	}
+
+	.districts {
+		font-weight: 600;
+	}
+
+	.more {
+		font-size: var(--font-size-1);
+	}
+
+	.back-to-top {
+		--btn-py: var(--size-3);
+		box-shadow: var(--shadow-3);
+		transition:
+			opacity 0.2s,
+			translate 0.2s,
+			visibility 0.2s;
+
+		@container (not scroll-state(scrollable: top)) {
+			opacity: 0;
+			translate: 0 var(--size-4);
+			visibility: hidden;
+		}
+	}
+
+	.empty {
+		margin-block-start: var(--size-8);
+		font-size: var(--font-size-4);
+	}
+}
+
+@layer utilities {
+	.text-brand {
+		color: var(--brand);
+	}
+
+	.text-muted {
+		color: var(--color-muted);
+	}
+}

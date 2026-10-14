@@ -1,0 +1,46 @@
+---
+import "@/assets/main.css";
+import ServiceWorker from "@/components/ServiceWorker.astro";
+import { siteTitle, themeColor, isProd } from "@/consts";
+
+interface Props {
+	title: string;
+	description: string;
+}
+
+const { title, description } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="color-scheme" content="light dark" />
+		<meta name="theme-color" content={themeColor} />
+		<title>{title}</title>
+		<meta name="description" content={description} />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta name="apple-mobile-web-app-title" content={siteTitle} />
+		<meta name="mobile-web-app-capable" content="yes" />
+		<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+		<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+		<link rel="manifest" href="/manifest.webmanifest" />
+		{isProd && <ServiceWorker />}
+	</head>
+	<body>
+		<main id="main" class="container">
+			<slot />
+		</main>
+		<footer class="container text-muted">
+			<p>
+				Plate data from the German Wikipedia <a
+					href="https://de.wikipedia.org/wiki/Liste_der_Kfz-Kennzeichen_in_Deutschland"
+					>Liste der Kfz-Kennzeichen in Deutschland</a
+				>, licensed <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.
+				Made by <a href="https://grimlink.com">Grimlink</a>.
+			</p>
+		</footer>
+	</body>
+</html>
