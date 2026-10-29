@@ -122,6 +122,10 @@
 	}
 
 	/* Registration seal on top, inspection sticker below */
+	.plate-code {
+		text-box: trim-both cap alphabetic;
+	}
+
 	.plate-seals {
 		display: grid;
 		gap: 0.05em;
@@ -164,6 +168,8 @@
 			--search-clear-size: 0.875em;
 			--search-clear-gap: 0.1em;
 			text-transform: uppercase;
+			/* text-box does not trim inputs, and Barlow sets its caps 0.045em low */
+			translate: 0 -0.045em;
 
 			&::placeholder {
 				color: color-mix(in oklab, var(--plate-fg) 25%, var(--plate-bg));

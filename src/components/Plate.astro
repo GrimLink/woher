@@ -11,7 +11,7 @@ const { code, tag: Tag = "span", class: className } = Astro.props;
 <Tag class:list={["plate", className]}>
 	<span class="plate-eu" aria-hidden="true">D</span>
 	<span class="plate-text">
-		{code}
+		{code && <span class="plate-code">{code}</span>}
 		<slot />
 		{code && <span class="plate-seals" aria-hidden="true"></span>}
 	</span>
