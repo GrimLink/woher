@@ -208,9 +208,11 @@
 		margin-block: var(--size-8) 0;
 
 		& h2 {
+			--plate-max: var(--font-size-8);
+			--plate-min: var(--font-size-6);
 			grid-area: 1 / 2 / -1;
 			align-self: start;
-			font-size: var(--font-size-7);
+			font-size: clamp(var(--plate-min), 14cqi, var(--plate-max));
 		}
 
 		/* The last row takes the spare height so the links sit at the bottom of equal height cards */
@@ -240,17 +242,7 @@
 			border-width: 2px;
 
 			& h2 {
-				font-size: var(--font-size-8);
-			}
-		}
-
-		@container (width >= 20rem) {
-			& h2 {
-				font-size: var(--font-size-8);
-			}
-
-			& .is-match h2 {
-				font-size: var(--font-size-9);
+				--plate-max: var(--font-size-9);
 			}
 		}
 	}
