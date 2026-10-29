@@ -2,15 +2,7 @@
 import Layout from "@/layouts/Layout.astro";
 import Plate from "@/components/Plate.astro";
 import { siteDescription as description } from "@/consts";
-import {
-	plates,
-	normalize,
-	searchText,
-	stripTags,
-	wikiUrl,
-	mapUrl,
-	searchUrl,
-} from "@/plates";
+import { plates, normalize, searchText, stripTags, wikiUrl, mapUrl, searchUrl } from "@/plates";
 
 const title = "Woher? German licence plate lookup";
 ---
@@ -70,43 +62,45 @@ const title = "Woher? German licence plate lookup";
 				/>
 			</Plate>
 		</form>
-		<p id="status" class="text-muted" aria-live="polite">{plates.length} codes</p>
+		<p id="status" class="text-muted" aria-live="polite">
+			{plates.length} codes
+		</p>
 	</search>
 
-	<ol role="list" id="results" class="results auto-grid gap">
-		{
-			plates.map((plate) => (
-				<li
-					class="card flex-col gap-sm"
-					id={plate.code}
-					data-code={normalize(plate.code)}
-					data-search={searchText(plate)}
-				>
-					<h2>
-						<Plate code={plate.code} />
-					</h2>
-					<p class="origin" title={`${plate.code} comes from ${stripTags(plate.origin)}`}>
-						<Fragment set:html={plate.origin} />
-					</p>
-					<ul role="list" class="districts">
-						{plate.districts.map((district) => (
-							<li>
-								<a href={searchUrl(district, plate.state)}>{district.name}</a>
-							</li>
-						))}
-					</ul>
-					<p class="text-muted">{plate.state}</p>
-					<p class="more flex-wrap gap-sm" style="--my: auto 0">
-						{wikiUrl(plate.districts[0]) && <a href={wikiUrl(plate.districts[0])}>Wikipedia</a>}
-						<a href={mapUrl(plate.districts[0], plate.state)}>Google Maps</a>
-					</p>
-				</li>
-			))
-		}
+	<ol role="list" id="results" class="results auto-grid gap" style="--max-col-size: 20rem">
+		{plates.map((plate) => (
+			<li
+				class="card grid gap-sm"
+				id={plate.code}
+				data-code={normalize(plate.code)}
+				data-search={searchText(plate)}
+			>
+				<h2>
+					<Plate code={plate.code} />
+				</h2>
+				<p class="origin" title={`${plate.code} comes from ${stripTags(plate.origin)}`}>
+					<Fragment set:html={plate.origin} />
+				</p>
+				<ul role="list" class="districts">
+					{plate.districts.map((district) => (
+						<li>
+							<a href={searchUrl(district, plate.state)}>{district.name}</a>
+						</li>
+					))}
+				</ul>
+				<p class="text-muted">{plate.state}</p>
+				<p class="more flex-wrap gap-sm">
+					{wikiUrl(plate.districts[0]) && (
+						<a href={wikiUrl(plate.districts[0])}>Wikipedia</a>
+					)}
+					<a href={mapUrl(plate.districts[0], plate.state)}>Google Maps</a>
+				</p>
+			</li>
+		))}
 	</ol>
 	<p id="empty" class="empty" hidden>
-		No current German code matches that. It could be an old code that is no longer issued, or a plate
-		from another country.
+		No current German code matches that. It could be an old code that is no longer issued, or a
+		plate from another country.
 	</p>
 	<a
 		href="#q"
@@ -168,7 +162,11 @@ const title = "Woher? German licence plate lookup";
 		}
 
 		const matches = items
-			.map((item, index) => ({ item, index, rank: code ? rank(item, code, words) : undefined }))
+			.map((item, index) => ({
+				item,
+				index,
+				rank: code ? rank(item, code, words) : undefined,
+			}))
 			.filter((match) => match.rank !== undefined)
 			.sort((a, b) => a.rank! - b.rank! || a.index - b.index);
 

@@ -205,16 +205,34 @@
 	}
 
 	.results {
-		--max-col-size: 18rem;
 		margin-block: var(--size-8) 0;
 
 		& h2 {
-			font-size: var(--font-size-8);
+			grid-area: 1 / 2 / -1;
+			align-self: start;
+			font-size: var(--font-size-7);
 		}
 
+		/* The last row takes the spare height so the links sit at the bottom of equal height cards */
 		& .card {
 			--text-flow: 0;
+			grid-template-columns: minmax(0, 1fr) auto;
+			overflow-wrap: break-word;
+			grid-template-rows: repeat(3, auto) 1fr;
+			column-gap: var(--size-4);
+			container-type: inline-size;
 			scroll-margin-block-start: var(--size-4);
+		}
+
+		/* Too narrow for the plate beside the text, which is below a 370px screen */
+		@container (width < 18rem) {
+			& .card > * {
+				grid-area: auto / 1 / auto / -1;
+			}
+		}
+
+		& .more {
+			align-self: end;
 		}
 
 		& .is-match {
@@ -222,6 +240,16 @@
 			border-width: 2px;
 
 			& h2 {
+				font-size: var(--font-size-8);
+			}
+		}
+
+		@container (width >= 20rem) {
+			& h2 {
+				font-size: var(--font-size-8);
+			}
+
+			& .is-match h2 {
 				font-size: var(--font-size-9);
 			}
 		}
