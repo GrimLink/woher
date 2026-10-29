@@ -21,8 +21,6 @@ export interface Plate {
 
 export const plates = data as Plate[];
 
-export const letters = [...new Set(plates.map((plate) => plate.code[0]))];
-
 export function stripTags(html: string): string {
 	return html.replace(/<[^>]+>/g, "");
 }

@@ -4,7 +4,6 @@ import Plate from "@/components/Plate.astro";
 import { siteDescription as description } from "@/consts";
 import {
 	plates,
-	letters,
 	normalize,
 	searchText,
 	stripTags,
@@ -44,19 +43,6 @@ const title = "Woher? German licence plate lookup";
 			</Plate>
 		</form>
 		<p id="status" class="text-muted" aria-live="polite">{plates.length} codes</p>
-		<nav aria-label="Browse by letter">
-			<ul role="list" class="letters flex-wrap gap-sm">
-				{
-					letters.map((letter) => (
-						<li>
-							<a class="btn" href={`?q=${letter}`} data-letter={letter}>
-								{letter}
-							</a>
-						</li>
-					))
-				}
-			</ul>
-		</nav>
 	</search>
 
 	<ol role="list" id="results" class="results auto-grid gap">
@@ -125,7 +111,6 @@ const title = "Woher? German licence plate lookup";
 	const status = document.querySelector<HTMLParagraphElement>("#status")!;
 	const empty = document.querySelector<HTMLParagraphElement>("#empty")!;
 	const items = [...list.querySelectorAll<HTMLLIElement>(":scope > li")];
-	const letterLinks = [...document.querySelectorAll<HTMLAnchorElement>("[data-letter]")];
 	const total = items.length;
 
 	const escape = (value: string) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -140,11 +125,6 @@ const title = "Woher? German licence plate lookup";
 
 	function update(value: string) {
 		const query = normalize(value);
-		const letter = value.trim().toLocaleUpperCase("de");
-		letterLinks.forEach((link) => {
-			if (link.dataset.letter === letter) link.setAttribute("aria-current", "true");
-			else link.removeAttribute("aria-current");
-		});
 		// A full plate like "EL-AB 123" only needs the part before the first separator.
 		const code = query.split(/[\s\-:0-9]/)[0];
 		const isPlate = code !== query;
@@ -193,16 +173,6 @@ const title = "Woher? German licence plate lookup";
 	input.form?.addEventListener("submit", (event) => {
 		event.preventDefault();
 		input.blur();
-	});
-
-	letterLinks.forEach((link) => {
-		link.addEventListener("click", (event) => {
-			event.preventDefault();
-			input.value = link.dataset.letter ?? "";
-			update(input.value);
-			sync();
-			input.focus();
-		});
 	});
 
 	const initial = new URLSearchParams(location.search).get("q");

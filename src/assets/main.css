@@ -173,11 +173,6 @@
 		margin-block-start: var(--size-8);
 	}
 
-	.letters {
-		--btn-font-weight: 700;
-		font-family: var(--plate-font);
-	}
-
 	.results {
 		--max-col-size: 18rem;
 		margin-block: var(--size-8) 0;
