@@ -84,6 +84,7 @@
 		min-block-size: 1.35em;
 		background: var(--plate-bg);
 		color: var(--plate-fg);
+		margin: 0.05em;
 		border: 0.06em solid var(--plate-fg);
 		border-radius: 0.14em;
 		box-shadow:
@@ -121,11 +122,11 @@
 		letter-spacing: 0.04em;
 	}
 
-	/* Registration seal on top, inspection sticker below */
 	.plate-code {
 		text-box: trim-both cap alphabetic;
 	}
 
+	/* Registration seal on top, inspection sticker below */
 	.plate-seals {
 		display: grid;
 		gap: 0.05em;
@@ -167,9 +168,9 @@
 			--outline-size: 0;
 			--search-clear-size: 0.875em;
 			--search-clear-gap: 0.1em;
-			text-transform: uppercase;
 			/* text-box does not trim inputs, and Barlow sets its caps 0.045em low */
 			translate: 0 -0.045em;
+			text-transform: uppercase;
 
 			&::placeholder {
 				color: color-mix(in oklab, var(--plate-fg) 25%, var(--plate-bg));

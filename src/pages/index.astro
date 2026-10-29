@@ -70,7 +70,8 @@ const title = "Woher? German licence plate lookup";
 	<ol role="list" id="results" class="results auto-grid gap" style="--max-col-size: 20rem">
 		{plates.map((plate) => (
 			<li
-				class="card grid gap-sm"
+				class="card grid gap"
+				style="--gap: 0.5em 1em"
 				id={plate.code}
 				data-code={normalize(plate.code)}
 				data-search={searchText(plate)}
