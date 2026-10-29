@@ -1,4 +1,5 @@
 ---
+import { Font } from "astro:assets";
 import "@/assets/main.css";
 import ServiceWorker from "@/components/ServiceWorker.astro";
 import { siteTitle, themeColor, isProd, base } from "@/consts";
@@ -27,6 +28,7 @@ const { title, description } = Astro.props;
 		<link rel="icon" href={`${base}favicon.svg`} type="image/svg+xml" />
 		<link rel="apple-touch-icon" href={`${base}apple-touch-icon.png`} />
 		<link rel="manifest" href={`${base}manifest.webmanifest`} />
+		<Font cssVariable="--font-plate" preload />
 		{isProd && <ServiceWorker />}
 	</head>
 	<body>
