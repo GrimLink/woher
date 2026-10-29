@@ -39,7 +39,7 @@ async function refreshCache(response) {
  */
 async function handleNavigation(request) {
 	try {
-		const response = await fetch(request);
+		const response = await fetch(request, { cache: "no-cache" });
 		if (response.ok) refreshCache(response.clone()).catch(() => {});
 		return response;
 	} catch {
