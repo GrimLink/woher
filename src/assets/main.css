@@ -27,7 +27,7 @@
 		--eu-stars: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-10 -10 20 20' fill='%23fc0'><circle cx='0.0' cy='-8.0' r='1.4'/><circle cx='4.0' cy='-6.9' r='1.4'/><circle cx='6.9' cy='-4.0' r='1.4'/><circle cx='8.0' cy='-0.0' r='1.4'/><circle cx='6.9' cy='4.0' r='1.4'/><circle cx='4.0' cy='6.9' r='1.4'/><circle cx='0.0' cy='8.0' r='1.4'/><circle cx='-4.0' cy='6.9' r='1.4'/><circle cx='-6.9' cy='4.0' r='1.4'/><circle cx='-8.0' cy='0.0' r='1.4'/><circle cx='-6.9' cy='-4.0' r='1.4'/><circle cx='-4.0' cy='-6.9' r='1.4'/></svg>");
 		--plate-bg: #fff;
 		--plate-fg: #111;
-		--plate-font: "Plate DIN", "Arial Narrow", sans-serif;
+		--plate-font: "Plate DIN", "Arial Narrow", "Roboto Condensed", sans-serif-condensed, sans-serif;
 		--color-muted: color-mix(in oklab, var(--root-fg) 70%, var(--root-bg));
 		--container-size: 72rem;
 	}
