@@ -19,6 +19,6 @@
 		"@fylgja/card": "^2.0.2",
 		"@fylgja/tokens": "^2.2.1",
 		"@fylgja/utilities": "^2.1.4",
-		"astro": "^7.3.8"
+		"astro": "^7.4.4"
 	}
 }
