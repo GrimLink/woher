@@ -16,12 +16,40 @@ const title = "Woher? German licence plate lookup";
 ---
 
 <Layout title={title} description={description}>
-	<header class="flow">
-		<h1>Woher<span class="text-brand">?</span></h1>
+	<header class="intro flow-none flex gap-sm align">
+		<h1>
+			Woher<span class="text-brand">?</span>
+		</h1>
+		<button type="button" class="round" popovertarget="about" aria-label="About Woher">
+			<svg
+				aria-hidden="true"
+				width="24"
+				height="24"
+				viewBox="0 0 24 24"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="3"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+			>
+				<path d="M8 8a4 4 0 1 1 6 3.5c-1.2.7-2 1.5-2 3v.5M12 20h.01"></path>
+			</svg>
+		</button>
+	</header>
+	<dialog id="about" class="about" popover aria-labelledby="about-title">
+		<h2 id="about-title">Where is that car from?</h2>
 		<p>
 			Spotted a German plate? Type the letters before the seals and find out where it is from.
 		</p>
-	</header>
+		<button
+			type="button"
+			class="btn --primary"
+			popovertarget="about"
+			popovertargetaction="hide"
+		>
+			Got it
+		</button>
+	</dialog>
 
 	<search class="finder flow">
 		<form action="" method="get">

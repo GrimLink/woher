@@ -72,10 +72,6 @@
 		letter-spacing: -0.02em;
 	}
 
-	h1 + p {
-		font-size: var(--font-size-4);
-	}
-
 	::-webkit-search-cancel-button {
 		-webkit-appearance: none;
 		appearance: none;
@@ -182,6 +178,25 @@
 			&::placeholder {
 				color: color-mix(in oklab, var(--plate-fg) 25%, var(--plate-bg));
 			}
+		}
+	}
+
+	.intro {
+		align-items: center;
+
+		& button {
+			--btn-px: var(--size-1);
+			--btn-py: var(--size-1);
+			color: var(--color-muted);
+		}
+	}
+
+	.about {
+		--text-flow: 0 var(--size-4);
+		max-inline-size: min(calc(100% - var(--screen-x)), 28rem);
+
+		& p {
+			font-size: var(--font-size-4);
 		}
 	}
 
